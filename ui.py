@@ -10,7 +10,7 @@ def setUI():
                     if(iframe.hasAttribute("srcdoc"))
                         iframe.parentElement.style.display="none"
                 }
-            },1000)
+            },300)
             var my_style= window.parent.document.createElement('style');
             my_style.innerHTML=`
                 

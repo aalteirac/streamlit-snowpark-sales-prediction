@@ -28,9 +28,13 @@ def getPage():
         
 #    with st.sidebar:
     with st.expander('Settings'):
-        category_type = st.selectbox("Category Type", cat1)
-        outlet_type = st.selectbox("Outlet Type", cat2)
-        outlet_number = st.selectbox("Outlet Number", cat3)
+        sc11, sc22,sc33 = st.columns(3)
+        with sc11:
+            category_type = st.selectbox("Category Type", cat1)
+        with sc22:
+            outlet_type = st.selectbox("Outlet Type", cat2)
+        with sc33:    
+            outlet_number = st.selectbox("Outlet Number", cat3)
         category_selected = '~'.join([category_type, outlet_type, outlet_number])
         
         accu_preprocessed = preprocess_data(df_accuracy, category_selected, time_col='ds')
@@ -59,14 +63,8 @@ def getPage():
                                         max_value=accu_preprocessed.dt.max().date())
             st.session_state["end_date"] = end_date
 
-        with sc3:
-            with st.form("my_form"):
-                selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
-                
-                # Every form must have a submit button.
-                submitted = st.form_submit_button("Submit")
-                if submitted:
-                    st.warning("Done! Selected model will be used in next run.") 
+        # with sc3:
+           
 
     start_date = pd.to_datetime(start_date)
     # we need to include the last date of selection
@@ -145,7 +143,13 @@ def getPage():
     fig0 = create_series_plot_new(accu_preprocessed_filtered)
     st.plotly_chart(fig0, use_container_width=True, theme="streamlit")
     
-    # with st.sidebar:
+    with st.form("my_form"):
+                selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
+                
+                # Every form must have a submit button.
+                submitted = st.form_submit_button("Submit")
+                if submitted:
+                    st.warning("Done! Selected model will be used in next run.") 
    
 
         

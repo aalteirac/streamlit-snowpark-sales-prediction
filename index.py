@@ -25,7 +25,7 @@ def init():
     if st.session_state["authentication_status"]!=True:
         login.getPage()
         return
-    image = Image.open('streamlit.png')
+    # image = Image.open('streamlit.png')
 
     col1,col2=st.columns([1,5])
     st.image('streamlit.png',width=70)

@@ -10,12 +10,14 @@ from src.helpers import prophetize
 from src.helpers import push_to_keboola
 from datetime import datetime
 
+def getPage():  
+    if 'authentication_status' not in st.session_state:
+        login.getPage()
 
-if st.session_state["authentication_status"]:
-    st.title("Generate Prediction")    
+    # st.title("Generate Prediction")    
     
     # Get user inputs
-    with st.sidebar:
+    with st.expander('Settings',expanded=True):
         category = st.selectbox("Enter category", ['Takeaway', 'Eat In'])
         meal = st.selectbox("Enter meal", ['lunch', 'dinner'])
         prediction_period = st.number_input("Enter prediction period (in days)", min_value=1, value=30)

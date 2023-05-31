@@ -6,3 +6,5 @@ plotly==5.9.0
 streamlit_extras
 snowflake-snowpark-python
 snowflake-snowpark-python[pandas]
+streamlit-aggrid==0.3.4.post3
+hydralit_components==1.0.10

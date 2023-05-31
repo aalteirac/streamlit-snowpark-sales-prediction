@@ -5,14 +5,15 @@ from src.graphs import filter_by_date
 from src.helpers import read_df, calculate_categories
 from src.helpers import MAPE
 import pandas as pd
-from streamlit_extras.switch_page_button import switch_page
+import Login as login
 import datetime
 
-if 'authentication_status' not in st.session_state:
-    switch_page("login")
 
-if st.session_state["authentication_status"]:
-    
+def getPage():
+    if 'authentication_status' not in st.session_state:
+        login.getPage()
+
+    # if st.session_state["authentication_status"]:
     #df_meals = read_df(ACCURACY_MONITORING_MEALS_TAB, date_col=["approximate_timestamp"])
     df_accuracy = read_df(ACCURACY_MONITORING_TAB, date_col="ds")
     df_accuracy["metric_actual"] = df_accuracy["metric_actual"].apply(int)
@@ -22,16 +23,18 @@ if st.session_state["authentication_status"]:
     #df_actuals = read_df(ACTUALS_NONAGG_TAB, date_col=["ds"])
     cat1, cat2, cat3 = calculate_categories(df_accuracy)
     
-    with st.sidebar:
+    # with st.sidebar:
+    
+        
+#    with st.sidebar:
+    with st.expander('Settings'):
         category_type = st.selectbox("Category Type", cat1)
         outlet_type = st.selectbox("Outlet Type", cat2)
         outlet_number = st.selectbox("Outlet Number", cat3)
         category_selected = '~'.join([category_type, outlet_type, outlet_number])
-    
-    accu_preprocessed = preprocess_data(df_accuracy, category_selected, time_col='ds')
         
-    with st.sidebar:
-        sc1, sc2 = st.columns(2)
+        accu_preprocessed = preprocess_data(df_accuracy, category_selected, time_col='ds')
+        sc1, sc2,sc3 = st.columns(3)
         with sc1:
             if "start_date" in st.session_state:
                 value = st.session_state["start_date"]
@@ -55,6 +58,16 @@ if st.session_state["authentication_status"]:
                                         min_value=start_date, 
                                         max_value=accu_preprocessed.dt.max().date())
             st.session_state["end_date"] = end_date
+
+        with sc3:
+            with st.form("my_form"):
+                selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
+                
+                # Every form must have a submit button.
+                submitted = st.form_submit_button("Submit")
+                if submitted:
+                    st.warning("Done! Selected model will be used in next run.") 
+
     start_date = pd.to_datetime(start_date)
     # we need to include the last date of selection
 
@@ -71,22 +84,22 @@ if st.session_state["authentication_status"]:
     #st.write(accu_preprocessed_filtered_agg)
     # 2. calculate MAPE
     mape_lunch_prophet = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast)
 
     mape_lunch_lgbm = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast_lgbm)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast_lgbm)
 
     mape_lunch_rf = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast_rf)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='lunch'].metric_forecast_rf)
 
     mape_dinner_prophet = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast)
 
     mape_dinner_lgbm = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast_lgbm)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast_lgbm)
 
     mape_dinner_rf = MAPE(accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_actual, 
-                              accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast_rf)
+                            accu_preprocessed_filtered_agg.loc[accu_preprocessed_filtered_agg.meal_category=='dinner'].metric_forecast_rf)
 
 
     #if meals_preprocessed_filtered.empty:
@@ -132,16 +145,10 @@ if st.session_state["authentication_status"]:
     fig0 = create_series_plot_new(accu_preprocessed_filtered)
     st.plotly_chart(fig0, use_container_width=True, theme="streamlit")
     
-    with st.sidebar:
-        with st.form("my_form"):
-            selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
-            
-            # Every form must have a submit button.
-            submitted = st.form_submit_button("Submit")
-            if submitted:
-                st.warning("Done! Selected model will be used in next run.")
+    # with st.sidebar:
+   
 
-    
+        
     
     
     

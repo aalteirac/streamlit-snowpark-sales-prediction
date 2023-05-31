@@ -5,6 +5,7 @@ import page.Generate_Prophet_Predictions as gen
 import Login as login
 import streamlit as st
 from ui import setUI
+from PIL import Image
 
 st.set_page_config(
     page_title="Model Dashboard",
@@ -24,6 +25,10 @@ def init():
     if st.session_state["authentication_status"]!=True:
         login.getPage()
         return
+    image = Image.open('streamlit.png')
+
+    col1,col2=st.columns([1,5])
+    st.image('streamlit.png',width=70)
     menu_data = [
         {'id':'accu','icon':"fas fa-map-signs",'label':"Models Accuracy"},
         {'id':'forecast','icon':"fab fa-buysellads",'label':"Forecast"},

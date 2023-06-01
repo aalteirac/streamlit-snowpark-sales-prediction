@@ -151,6 +151,7 @@ def getPage():
         #figure, raw_data = st.tabs(["figure", "raw_data"])
         
         fig0 = create_series_plot_new(accu_preprocessed_filtered)
+        fig0.update_layout(height=600)
         st.plotly_chart(fig0, use_container_width=True, theme="streamlit")
         
         with colFilter:

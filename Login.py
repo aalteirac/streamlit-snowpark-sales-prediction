@@ -31,15 +31,13 @@ def getPage():
     st.session_state["username"]=username
 
     if authentication_status:
-        #with st.sidebar:
         authenticator.logout('Logout', 'main')
         st.write(f'Welcome *{name}*')
     elif authentication_status == False:
-        #with st.sidebar:
         st.error('Username/password is incorrect')
     elif authentication_status == None:
-        #with st.sidebar:
-        st.warning('Please enter your username and password')
+        if  st.session_state.get("username") !='':
+            st.warning('Please enter your username and password')  
 
     if authentication_status:
         if "start_date" in st.session_state.keys():

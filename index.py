@@ -44,15 +44,20 @@ def init():
         override_theme=over_theme,
         hide_streamlit_markers=False, 
         sticky_nav=True, 
+        login_name='Logout',
         sticky_mode='pinned', 
     )
   
+    if page == "Logout":
+        del st.session_state["authentication_status"]
+        login.getPage()  
+
     if page == 'accu':
         ac.getPage()    
     if page == 'forecast':
         ind.getPage() 
     if page == "prophet":
-        gen.getPage() 
+        gen.getPage()  
 
 init()       
 

@@ -11,8 +11,8 @@ from src.helpers import push_to_keboola
 from datetime import datetime
 
 def getPage():  
-    colL,colC,colR=st.columns([1,9,1])
-    with colC:
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,10,60,1])
+    with colFilter:
         if 'authentication_status' not in st.session_state:
             login.getPage()
 
@@ -27,7 +27,7 @@ def getPage():
         # training_start_date = st.text_input("Enter training start date")
         # formatted_date = training_start_date.strftime("%Y-%m-%d")
 
-        # Perform calculations and generate plot
+    with colContent:
         if st.button("Generate Plot"):
             if category and meal and prediction_period:
                 prophet = prophetize(ACCURACY_MONITORING_TAB, category, meal, prediction_period)

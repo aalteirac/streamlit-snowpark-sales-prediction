@@ -24,8 +24,8 @@ def getCard(text,val,icon, key,compare=False,titleTextSize="11vw",content_text_s
 
 
 def getPage():
-    colL,colC,colR=st.columns([1,9,1])
-    with colC:
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,10,60,1])
+    with colFilter:
         if 'authentication_status' not in st.session_state:
             login.getPage()
 
@@ -51,32 +51,25 @@ def getPage():
         else:
             endatevalue = df_accuracy.ds.max().date()   
 
-        with st.expander('Filters',expanded=False):
-            sc11, sc22,sc33 = st.columns(3)
-            with sc11:
-                category_type = st.selectbox("Category Type", cat1,key='cat1')
-            with sc22:
-                outlet_type = st.selectbox("Outlet Type", cat2,key='cat2')
-            with sc33:    
-                outlet_number = st.selectbox("Outlet Number", cat3,key='cat3')
-                category_selected = '~'.join([category_type, outlet_type, outlet_number])
-
+        with st.expander('Filters',expanded=True):
+            category_type = st.selectbox("Category Type", cat1,key='cat1')
+            outlet_type = st.selectbox("Outlet Type", cat2,key='cat2')
+            outlet_number = st.selectbox("Outlet Number", cat3,key='cat3')
+            category_selected = '~'.join([category_type, outlet_type, outlet_number])
             accu_preprocessed = preprocess_data(df_accuracy, category_selected, time_col='ds')
-            sc1, sc2 = st.columns(2)
-            with sc1:
-                start_date = st.date_input("Start Date", 
+            
+            start_date = st.date_input("Start Date", 
                                             value=stdatevalue,
                                             min_value=accu_preprocessed.dt.min().date(), 
                                             max_value=accu_preprocessed.dt.max().date()
                                             )
-                st.session_state["start_date"] = start_date
-            with sc2:
-                end_date = st.date_input("End Date", 
+            st.session_state["start_date"] = start_date
+            end_date = st.date_input("End Date", 
                                             value=endatevalue,
                                             min_value=stdatevalue, 
                                             max_value=accu_preprocessed.dt.max().date()
                                             )
-                st.session_state["end_date"] = end_date    
+        st.session_state["end_date"] = end_date    
 
             
 
@@ -122,6 +115,7 @@ def getPage():
             st.warning("No data for available for the selection.")
             st.stop()
 
+    with colContent:
         with st.container():
             coltl,coltr=st.columns(2)
             with coltl:
@@ -159,11 +153,12 @@ def getPage():
         fig0 = create_series_plot_new(accu_preprocessed_filtered)
         st.plotly_chart(fig0, use_container_width=True, theme="streamlit")
         
-        with st.form("my_form"):
-                    selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
-                    submitted = st.form_submit_button("Submit")
-                    if submitted:
-                        st.warning("Done! Selected model will be used in next run.") 
+        with colFilter:
+            with st.form("my_form"):
+                        selectbox = st.selectbox("Select default model", ["Prophet", "LightGBM", "Random Forest"])
+                        submitted = st.form_submit_button("Submit")
+                        if submitted:
+                            st.warning("Done! Selected model will be used in next run.") 
    
 
         

@@ -98,7 +98,7 @@ def getTable(df,key):
              }
         }
     gripOption=ob.build()
-    AgGrid(df,gripOption, enable_enterprise_modules=True,fit_columns_on_grid_load=True,height=710,custom_css=custom_css,allow_unsafe_jscode=True, update_mode=GridUpdateMode.NO_UPDATE,key=key)
+    AgGrid(df,gripOption, enable_enterprise_modules=True,fit_columns_on_grid_load=True,height=654,custom_css=custom_css,allow_unsafe_jscode=True, update_mode=GridUpdateMode.NO_UPDATE,key=key)
 
 def color_negative_red(value):
   """
@@ -121,51 +121,53 @@ def getPage():
 
     df_accuracy = read_df(ACCURACY_MONITORING_TAB, date_col = "ds")
 
-    with st.expander("Settings"):
-        sc1, sc2 = st.columns(2)
-        with sc1:
-            if "start_date" in st.session_state:
-                value = st.session_state["start_date"]
-            else:
-                value = df_accuracy.ds.min().date()
-            start_date = st.date_input("Start Date", 
-                                        value=value,
-                                        min_value=df_accuracy.ds.min().date(), 
-                                        max_value=df_accuracy.ds.max().date()
-                                        )
-            st.session_state["start_date"] = start_date
-        with sc2:
-            if "end_date" in st.session_state:
-                value = st.session_state["end_date"]
-            else:
-                value = df_accuracy.ds.max().date()
+    colL,colC,colR=st.columns([1,9,1])
+    with colC:
+        with st.expander("Settings"):
+            sc1, sc2 = st.columns(2)
+            with sc1:
+                if "start_date" in st.session_state:
+                    value = st.session_state["start_date"]
+                else:
+                    value = df_accuracy.ds.min().date()
+                start_date = st.date_input("Start Date", 
+                                            value=value,
+                                            min_value=df_accuracy.ds.min().date(), 
+                                            max_value=df_accuracy.ds.max().date()
+                                            )
+                st.session_state["start_date"] = start_date
+            with sc2:
+                if "end_date" in st.session_state:
+                    value = st.session_state["end_date"]
+                else:
+                    value = df_accuracy.ds.max().date()
 
-            end_date = st.date_input("End Date", 
-                                        value=value,
-                                        min_value=start_date, 
-                                        max_value=df_accuracy.ds.max().date()
-                                        )
+                end_date = st.date_input("End Date", 
+                                            value=value,
+                                            min_value=start_date, 
+                                            max_value=df_accuracy.ds.max().date()
+                                            )
 
-    # we need to include the last date of selection
-    end_date = end_date + datetime.timedelta(days=1)
-    summary_df = create_summary_table(df_accuracy, str(start_date), str(end_date))
+        # we need to include the last date of selection
+        end_date = end_date + datetime.timedelta(days=1)
+        summary_df = create_summary_table(df_accuracy, str(start_date), str(end_date))
 
-    st.markdown("### Mean Average Percentage Error (MAPE) over defined period")
+        st.markdown("### Mean Average Percentage Error (MAPE) over defined period")
 
-    t1, t2 = st.tabs(["Summary", "Detailed"])
+        t1, t2 = st.tabs(["Summary", "Detailed"])
 
-    summary_df['cat_mean'] = summary_df.index
-    cols = ["cat_mean","prophet_mean", "lgbm_mean", "rf_mean"]
+        summary_df['cat_mean'] = summary_df.index
+        cols = ["cat_mean","prophet_mean", "lgbm_mean", "rf_mean"]
 
-    with t1:
-        # st.dataframe(summary_df[cols].style.applymap(color_negative_red).format('{:.2f} %'))
-        getTable(summary_df[cols],'simple')
+        with t1:
+            # st.dataframe(summary_df[cols].style.applymap(color_negative_red).format('{:.2f} %'))
+            getTable(summary_df[cols],'simple')
 
-    with t2:
-        cols = [c for c in summary_df.columns if not c.endswith("_mean")]
-        cols.insert(0,'cat_mean')
-        # st.dataframe(summary_df[cols].style.applymap(color_negative_red).format('{:.2f} %'))
-        getTable(summary_df[cols],'detailled')
+        with t2:
+            cols = [c for c in summary_df.columns if not c.endswith("_mean")]
+            cols.insert(0,'cat_mean')
+            # st.dataframe(summary_df[cols].style.applymap(color_negative_red).format('{:.2f} %'))
+            getTable(summary_df[cols],'detailled')
 
 
 

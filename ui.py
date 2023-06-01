@@ -23,7 +23,7 @@ def setUI():
                 }
                 .main .block-container{
                     max-width: unset;
-                    padding-left:1em;
+                    padding-left:0em;
                     padding-right: 0em;
                     padding-top: 0em;
                     padding-bottom: 1em;

@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import datetime
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def preprocess_data(original_dataframe:pd.DataFrame, category, time_col='approximate_timestamp', freq='1H'):
     
     FILTER = (original_dataframe.category==category)

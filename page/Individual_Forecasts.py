@@ -51,7 +51,7 @@ def getPage():
         else:
             endatevalue = df_accuracy.ds.max().date()   
 
-        with st.expander('Settings',expanded=False):
+        with st.expander('Filters',expanded=False):
             sc11, sc22,sc33 = st.columns(3)
             with sc11:
                 category_type = st.selectbox("Category Type", cat1,key='cat1')

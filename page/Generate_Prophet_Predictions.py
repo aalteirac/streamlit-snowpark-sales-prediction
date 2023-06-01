@@ -19,7 +19,7 @@ def getPage():
         # st.title("Generate Prediction")    
         
         # Get user inputs
-        with st.expander('Settings',expanded=True):
+        with st.expander('Filters',expanded=True):
             category = st.selectbox("Enter category", ['Takeaway', 'Eat In'])
             meal = st.selectbox("Enter meal", ['lunch', 'dinner'])
             prediction_period = st.number_input("Enter prediction period (in days)", min_value=1, value=30)

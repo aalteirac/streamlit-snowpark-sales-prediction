@@ -28,7 +28,7 @@ def init():
     # image = Image.open('streamlit.png')
 
     col1,col2=st.columns([1,5])
-    st.image('https://alteirac.com/st.svg',width=50)
+    st.image('https://alteirac.com/st.svg?t=t',width=100)
     menu_data = [
         {'id':'accu','icon':"fas fa-map-signs",'label':"Models Accuracy"},
         {'id':'forecast','icon':"fab fa-buysellads",'label':"Forecast"},

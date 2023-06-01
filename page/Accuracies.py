@@ -123,7 +123,7 @@ def getPage():
 
     colL,colC,colR=st.columns([1,9,1])
     with colC:
-        with st.expander("Settings"):
+        with st.expander("Filters"):
             sc1, sc2 = st.columns(2)
             with sc1:
                 if "start_date" in st.session_state:

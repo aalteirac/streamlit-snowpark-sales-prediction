@@ -11,7 +11,7 @@ from src.helpers import push_to_keboola
 from datetime import datetime
 
 def getPage():  
-    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,10,60,1])
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,14,60,1])
     with colFilter:
         if 'authentication_status' not in st.session_state:
             login.getPage()

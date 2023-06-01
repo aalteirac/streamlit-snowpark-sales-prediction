@@ -24,33 +24,32 @@ def getCard(text,val,icon, key,compare=False,titleTextSize="11vw",content_text_s
 
 
 def getPage():
-    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,10,60,1])
-    with colFilter:
-        if 'authentication_status' not in st.session_state:
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,14,60,1])
+    if 'authentication_status' not in st.session_state:
             login.getPage()
 
-        # if st.session_state["authentication_status"]:
-        #df_meals = read_df(ACCURACY_MONITORING_MEALS_TAB, date_col=["approximate_timestamp"])
-        df_accuracy = read_df(ACCURACY_MONITORING_TAB, date_col="ds")
-        df_accuracy["metric_actual"] = df_accuracy["metric_actual"].apply(int)
-        df_accuracy["metric_forecast"] = df_accuracy["metric_forecast"].apply(float)
-        df_accuracy["metric_forecast_lgbm"] = df_accuracy["metric_forecast_lgbm"].apply(float)
-        df_accuracy["metric_forecast_rf"] = df_accuracy["metric_forecast_rf"].apply(float)
-        #df_actuals = read_df(ACTUALS_NONAGG_TAB, date_col=["ds"])
-        cat1, cat2, cat3 = calculate_categories(df_accuracy)
+    # if st.session_state["authentication_status"]:
+    #df_meals = read_df(ACCURACY_MONITORING_MEALS_TAB, date_col=["approximate_timestamp"])
+    df_accuracy = read_df(ACCURACY_MONITORING_TAB, date_col="ds")
+    df_accuracy["metric_actual"] = df_accuracy["metric_actual"].apply(int)
+    df_accuracy["metric_forecast"] = df_accuracy["metric_forecast"].apply(float)
+    df_accuracy["metric_forecast_lgbm"] = df_accuracy["metric_forecast_lgbm"].apply(float)
+    df_accuracy["metric_forecast_rf"] = df_accuracy["metric_forecast_rf"].apply(float)
+    #df_actuals = read_df(ACTUALS_NONAGG_TAB, date_col=["ds"])
+    cat1, cat2, cat3 = calculate_categories(df_accuracy)
+    
+    # with st.sidebar:
+    
         
-        # with st.sidebar:
-        
-            
-        if "start_date" in st.session_state:
-            stdatevalue = st.session_state["start_date"]
-        else:
-            stdatevalue = df_accuracy.ds.min().date()
-        if "end_date" in st.session_state:
-            endatevalue = st.session_state["end_date"]
-        else:
-            endatevalue = df_accuracy.ds.max().date()   
-
+    if "start_date" in st.session_state:
+        stdatevalue = st.session_state["start_date"]
+    else:
+        stdatevalue = df_accuracy.ds.min().date()
+    if "end_date" in st.session_state:
+        endatevalue = st.session_state["end_date"]
+    else:
+        endatevalue = df_accuracy.ds.max().date()   
+    with colFilter:
         with st.expander('Filters',expanded=True):
             category_type = st.selectbox("Category Type", cat1,key='cat1')
             outlet_type = st.selectbox("Outlet Type", cat2,key='cat2')

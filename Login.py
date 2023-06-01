@@ -22,8 +22,9 @@ def getPage():
     if "username" not in st.session_state:
         st.session_state["username"]=""
 
-
-    name, authentication_status, username = authenticator.login('Login', 'main')
+    col1,col2,col3=st.columns(3)
+    with col2:
+        name, authentication_status, username = authenticator.login('Login', 'main')
 
     st.session_state["name"]=name
     st.session_state["authentication_status"]=authentication_status

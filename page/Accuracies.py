@@ -120,7 +120,7 @@ def color_negative_red(value):
 def getPage():
 
     df_accuracy = read_df(ACCURACY_MONITORING_TAB, date_col = "ds")
-    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,14,60,1])
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,28,120,4])
     with colFilter:
         with st.expander("Filters",expanded=True):
             if "start_date" in st.session_state:

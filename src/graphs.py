@@ -89,7 +89,7 @@ def create_series_plot_new(dataframe:pd.DataFrame):
                     name='Actuals data', 
                     mode='markers+lines', 
                     #dash='dash',
-                    line=dict(color="grey", dash="dot", width=4)
+                    line=dict(color="lightgrey", width=12)
                     )
     fig.add_scatter(x=dataframe['dt'], 
                     y=dataframe['metric_forecast'], 

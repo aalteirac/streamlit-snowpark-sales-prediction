@@ -24,7 +24,7 @@ def getCard(text,val,icon, key,compare=False,titleTextSize="11vw",content_text_s
 
 
 def getPage():
-    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,14,60,1])
+    colSpanLeft,colFilter,colContent,colSpanRight=st.columns([1,28,120,4])
     if 'authentication_status' not in st.session_state:
             login.getPage()
 
@@ -150,7 +150,7 @@ def getPage():
         #figure, raw_data = st.tabs(["figure", "raw_data"])
         
         fig0 = create_series_plot_new(accu_preprocessed_filtered)
-        fig0.update_layout(height=600)
+        fig0.update_layout(height=570)
         st.plotly_chart(fig0, use_container_width=True, theme="streamlit")
         
         with colFilter:
